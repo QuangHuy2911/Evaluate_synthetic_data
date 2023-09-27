@@ -1,5 +1,7 @@
 import xml.etree.ElementTree as ET
 import os
+import glob
+import shutil
 
 list_no_use = ["table column header"]
 
@@ -167,8 +169,8 @@ def create_new_ground_truth(root, output, file_xml):
     tree.write(save_file)
 
 if __name__ == '__main__':
-    input_folder = './results'
-    output_folder = './samples'
+    input_folder = './results' # Input folder
+    output_folder = './samples' # Output folder
     for file in os.listdir(input_folder):
         if file.endswith('.xml'):
             tree = ET.parse(os.path.join(input_folder, file))
@@ -182,6 +184,10 @@ if __name__ == '__main__':
                    cells = handle_spanning_cell(object, cells)
             create_new_object(root, cells)
             create_new_ground_truth(root, output_folder, file)
+
+    # Copy image to output folder
+    for img_file in glob.iglob(os.path.join(input_folder, '*.jpg')):
+        shutil.copy(img_file, output_folder)
             
 
         
